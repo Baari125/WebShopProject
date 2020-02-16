@@ -1,57 +1,297 @@
 swagger: "2.0"
 info:
   version: "0.0.1"
-  title: Hello World App
-# during dev, should point to your local machine
+  title: Shop Project
 host: localhost:10010
-# basePath prefixes all resource paths 
 basePath: /
-# 
 schemes:
-  # tip: remove http to make production-grade
   - http
   - https
-# format of bodies a client can send (Content-Type)
 consumes:
   - application/json
-# format of the responses to the client (Accepts)
 produces:
   - application/json
 paths:
-  /hello:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: hello_world
+  /shops:
+    x-swagger-router-controller: shop_controller
     get:
-      description: Returns 'Hello' to the caller
-      # used as the method name of the controller
-      operationId: hello
-      parameters:
-        - name: name
-          in: query
-          description: The name of the person to whom to say hello
-          required: false
-          type: string
+      description: Shows list of shops
+      operationId: getShops
       responses:
         "200":
-          description: Success
+          description: Listed shops
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
+            $ref: "#/definitions/ShopsResponse"
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+    post:
+      description: Creates new shop
+      operationId: createShop
+      parameters:
+        - name: name
+          in: formData
+          description: Shop name
+          required: true
+          type: string
+        - name: description
+          description: Shop description
+          in: formData
+          type: string
+        - name: city
+          description: Shop city place
+          type: string
+          in: formData
+        - name: address
+          description: Shop street and number place
+          type: string
+          in: formData
+      responses:
+        "200":
+          description: A shop added to list
+          schema:
+            $ref: "#/definitions/ShopResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  /shops/{id}:
+    x-swagger-router-controller: shop_controller
+    get:
+      description: Shows a shop
+      operationId: getShop
+      parameters:
+        - name: id
+          in: path
+          description: Shop ID
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Valid request
+          schema:
+            $ref: "#/definitions/ShopResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    put:
+      description: Modifies a shop
+      operationId: modifyShop
+      parameters:
+        - name: id
+          in: path
+          description: Shop ID
+          required: true
+          type: string
+        - name: name
+          in: formData
+          description: Shop name
+          type: string
+        - name: description
+          description: Shop description
+          in: formData
+          type: string
+        - name: city
+          description: Shop city place
+          type: string
+          in: formData
+        - name: address
+          description: Shop street and number place
+          type: string
+          in: formData
+      responses:
+        "200":
+          description: Success modified shop 
+          schema:
+            $ref: "#/definitions/ShopResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      description: Add product to shop
+      operationId: createProduct  
+      parameters:
+        - name: name
+          in: formData
+          description: item name
+          required: true
+          type: string
+        - name: description
+          description: Shop description
+          in: formData
+          type: string
+        - name: price
+          description: Product price
+          type: number
+          in: formData
+        - name: count
+          description: Product count
+          type: number
+          in: formData
+      responses:
+        "200":
+          description: A product added to shop
+          schema:
+            $ref: "#/definitions/ProductResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      description: Deletes a shop with all associated items
+      operationId: deleteShop
+      parameters:
+        - name: id
+          in: path
+          description: Shop ID
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success deleted shop
+          schema:
+            $ref: "#/definitions/ShopsResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
+  /shops/{id}/{productID}:  
+    x-swagger-router-controller: management_controller
+    get:
+      description: show product
+      operationId: getProduct
+      parameters:
+        - name: id
+          in: path
+          description: Shop ID
+          required: true
+          type: string
+        - name: productID
+          in: path
+          description: Product ID
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success show product
+          schema:
+            $ref: "#/definitions/ProductResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    put:
+      description: Modifies a product
+      operationId: modifyProduct
+      parameters:
+        - name: id
+          in: path
+          description: Shop ID
+          required: true
+          type: string
+        - name: productID
+          in: path
+          description: Product ID
+          required: true
+          type: string
+        - name: name
+          in: formData
+          description: Product name
+          type: string
+        - name: description
+          description: Product description
+          in: formData
+          type: string
+        - name: price
+          description: Product price
+          type: number
+          in: formData
+        - name: count
+          description: Product count
+          type: number
+          in: formData
+      responses:
+        "200":
+          description: Success modified product
+          schema:
+            $ref: "#/definitions/ProductResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      description: Deletes a product form shop
+      operationId: deleteProduct
+      parameters:
+        - name: id
+          in: path
+          description: Shop ID
+          required: true
+          type: string
+        - name: productID
+          in: path
+          description: Product ID
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success deleted product from shop
+          schema:
+            $ref: "#/definitions/ShopResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
   /swagger:
     x-swagger-pipe: swagger_raw
-# complex objects have schema definitions
 definitions:
-  HelloWorldResponse:
+  ShopsResponse:
+    type: array
+    items:
+      $ref: "#/definitions/ShopResponse"
+  
+  ShopResponse:
     required:
-      - message
+      - id
+      - name
     properties:
-      message:
+      id: 
         type: string
+      name:
+        type: string
+      description:
+        type: string
+      city: 
+        type: string
+      address:
+        type: string
+      products:
+        type: array
+        items:
+          $ref "#/definitions/ProductResponse"
+  
+  ProductResponse:
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      price:
+        type: number
+      count: 
+        type: number
+               
   ErrorResponse:
     required:
       - message
