@@ -12,6 +12,23 @@ consumes:
 produces:
   - application/json
 paths:
+  /home:
+    x-swagger-router-controller: web_controller
+    get:
+      operationId: homepage
+      description: Show homepage
+      produces:
+        - text/html; charset=utf-8
+      responses:
+        200:
+          description: Success show home page
+          schema:
+            type: string
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+   
   /shop:
     x-swagger-router-controller: shop_controller
     get:

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="libs/angular-material/angular-material.min.css">
+    <title>ShopProject</title>
+</head>
+<body ng-app="ShopProject" layout="column">
+    <script src="libs/angular/angular.js"></script>
+    <script src="libs/angular-animate/angular-animate.js"></script>
+    <script src="libs/angular-aria/angular-aria.js"></script>
+    <script src="libs/angular-material/angular-material.js"></script>
+    <script type="text/javascript">
+        angular.module('ShopProject',['ngMaterial', "ng", "ngAnimate", "ngAria"])
+        .controller('ProjectsController', function($scope, $http){
+            $http.get('http://localhost:10010/project')
+            .then(function(response){
+                $scope.projects = response.data
+            })
+        })
+    </script>
+
+    
+        <md-toolbar>
+            <div id="home" style="padding: 10px">
+                <a href='http://localhost:10010/home' style="color: black">SHOPS</a>
+            </div>
+        </md-toolbar>
+        <div class="container" layout="raw" style="flex: 1">
+            <md-sidenav md-is-locked-open="true" style="background-color: #b0b7d9">
+                <md-list ng-controller='ProjectsController'>
+                    <md-list-item ng-repeat='project in projects'>
+                        <md-button ng-href='http://localhost:10010/project/{{project.id}}'>{{project.title}}</md-button>
+                    </md-list-item>
+                </md-list>
+            </md-sidenav>
+        
+            <md-content id="content" style="flex: 1">
+                <div style="padding: 10px">
+                    Cześć. Wybierz sklep.
+                </div>
+            </md-content>
+        </div>
+
+
+</body>
+</html>

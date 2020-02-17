@@ -162,7 +162,7 @@ function deleteProduct(req, res, next) {
 					'products': r.db("ShopProject").table("Product").filter({ idShop: shop('id') }).coerceTo('array')
 				};
 			})
-			.run()then(
+			.run().then(
 				function(result) {
 					console.log(JSON.stringify(result));
 					res.json(result);
