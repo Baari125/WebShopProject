@@ -115,6 +115,11 @@ paths:
       description: Add product to shop
       operationId: createProduct  
       parameters:
+        - name: id
+          in: path
+          description: Shop ID
+          required: true
+          type: string
         - name: name
           in: formData
           description: item name
@@ -274,7 +279,19 @@ definitions:
       products:
         type: array
         items:
-          $ref "#/definitions/ProductResponse"
+          #$ref "#/definitions/ProductResponse"
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            description:
+              type: string
+            price:
+              type: number
+            count: 
+              type: number
   
   ProductResponse:
     required:
