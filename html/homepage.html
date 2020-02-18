@@ -12,7 +12,7 @@
     <script src="libs/angular-material/angular-material.js"></script>
     <script type="text/javascript">
         angular.module('ShopProject',['ngMaterial', "ng", "ngAnimate", "ngAria"])
-        .controller('ProjectsController', function($scope, $http){
+        .controller('ShopsController', function($scope, $http){
             $http.get('http://localhost:10010/project')
             .then(function(response){
                 $scope.projects = response.data
@@ -23,14 +23,14 @@
     
         <md-toolbar>
             <div id="home" style="padding: 10px">
-                <a href='http://localhost:10010/home' style="color: black">SHOPS</a>
+                <a href='http://localhost:10010/shop' style="color: black">SHOPS</a>
             </div>
         </md-toolbar>
         <div class="container" layout="raw" style="flex: 1">
             <md-sidenav md-is-locked-open="true" style="background-color: #b0b7d9">
-                <md-list ng-controller='ProjectsController'>
+                <md-list ng-controller='ShopsController'>
                     <md-list-item ng-repeat='project in projects'>
-                        <md-button ng-href='http://localhost:10010/project/{{project.id}}'>{{project.title}}</md-button>
+                        <md-button ng-href='http://localhost:10010/shop/{{shop.id}}'>{{shop.name}}</md-button>
                     </md-list-item>
                 </md-list>
             </md-sidenav>

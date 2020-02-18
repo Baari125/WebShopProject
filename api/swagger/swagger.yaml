@@ -28,7 +28,35 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-   
+            
+  /libs/{folder}/{name}:
+    x-swagger-router-controller: libs
+    get:
+      operationId: fileserve
+      description: return selected files
+      parameters:
+        - name: folder
+          type: string
+          in: path
+          required: true
+        - name: name
+          type: string
+          in: path
+          required: true
+      produces:
+        - text/html; charset=utf-8
+        - text/css
+        - text/javascript
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
   /shop:
     x-swagger-router-controller: shop_controller
     get:
